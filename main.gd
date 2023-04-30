@@ -59,7 +59,7 @@ func refresh():
 	use_baked = $VBoxContainer/HBoxContainer2/VBoxContainer/SampleTypes.is_selected(1)
 	#var use_baked = $VBoxContainer/CheckBox.button_pressed
 	var curve_line : Line2D = $CurveLine
-	
+	var marker = $ValueMarker
 	curve_line.clear_points()
 	if use_baked:
 		for i in sample_points:
@@ -70,7 +70,9 @@ func refresh():
 		for i in sample_points:
 			curve_line.add_point(Vector2(i * distance_between_points, window_size.y - (curve_height * my_curve.sample(i * sample_interval))))
 		sample_value = my_curve.sample(sample_offset)
-	
+	marker.clear_points()
+	marker.add_point(Vector2(0, window_size.y - (curve_height * sample_value)))
+	marker.add_point(Vector2(window_size.x, window_size.y - (curve_height * sample_value)))
 	$VBoxContainer/HBoxContainer2/VBoxContainer/SampleValue.text = "value: %.5f" % sample_value
 
 

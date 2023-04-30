@@ -14,9 +14,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7mlky")
 
-[node name="CurveLine" type="Line2D" parent="."]
-points = PackedVector2Array(0, 500, 600, 250)
-
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -88,6 +85,14 @@ horizontal_alignment = 2
 [node name="OffsetMarker" type="Line2D" parent="."]
 points = PackedVector2Array(0, 250, 0, 500)
 width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="ValueMarker" type="Line2D" parent="."]
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="CurveLine" type="Line2D" parent="."]
+points = PackedVector2Array(0, 500, 600, 250)
 
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/BakeResolution" to="." method="_on_bake_resolution_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/SamplePoints" to="." method="_on_sample_points_value_changed"]
