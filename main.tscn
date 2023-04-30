@@ -25,34 +25,32 @@ offset_bottom = 176.0
 grow_horizontal = 2
 theme = SubResource("Theme_7wrul")
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer"]
-visible = false
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-button_pressed = true
-text = "sample"
+size_flags_vertical = 3
+alignment = 1
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+[node name="BakeResolution" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-allow_reselect = true
-auto_height = true
-item_count = 2
-item_0/text = "sample"
-item_1/text = "sample_baked"
-
-[node name="BakeResolution" type="SpinBox" parent="VBoxContainer"]
-layout_mode = 2
+size_flags_horizontal = 3
 min_value = 2.0
 value = 10.0
 prefix = "bake resolution: "
 
-[node name="SamplePoints" type="SpinBox" parent="VBoxContainer"]
+[node name="SamplePoints" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 min_value = 2.0
 value = 100.0
 prefix = "sample points:"
 
-[node name="CurveList" type="ItemList" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CurveList" type="ItemList" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 allow_reselect = true
 auto_height = true
 item_count = 3
@@ -60,8 +58,39 @@ item_0/text = "x ^ 2"
 item_1/text = "sawtooth 1"
 item_2/text = "sawtooth 2"
 
-[connection signal="toggled" from="VBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
-[connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
-[connection signal="value_changed" from="VBoxContainer/BakeResolution" to="." method="_on_bake_resolution_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/SamplePoints" to="." method="_on_sample_points_value_changed"]
-[connection signal="item_selected" from="VBoxContainer/CurveList" to="." method="_on_curve_list_item_selected"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SampleTypes" type="ItemList" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+allow_reselect = true
+auto_height = true
+item_count = 2
+item_0/text = "sample"
+item_1/text = "sample_baked"
+
+[node name="SampleOffset" type="SpinBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+min_value = -10.0
+max_value = 10.0
+step = 0.0
+prefix = "offset: "
+
+[node name="SampleValue" type="Label" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "value: 0
+"
+horizontal_alignment = 2
+
+[node name="OffsetMarker" type="Line2D" parent="."]
+points = PackedVector2Array(0, 250, 0, 500)
+width = 5.0
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/BakeResolution" to="." method="_on_bake_resolution_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/SamplePoints" to="." method="_on_sample_points_value_changed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer2/CurveList" to="." method="_on_curve_list_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer2/VBoxContainer/SampleTypes" to="." method="_on_item_list_item_selected"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/VBoxContainer/SampleOffset" to="." method="_on_sample_offset_value_changed"]

@@ -1,13 +1,18 @@
 extends Control
 
 var my_curve     : Curve 
-
+var window_size: Vector2
+var curve_height: float = 150
+var use_baked : bool
+var sample_offset:float
+var sample_value:float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	window_size = get_viewport().get_visible_rect().size
 	my_curve = Curve.new()
 	switch_curve("x ^ 2")
-	$VBoxContainer/ItemList.select(1)
+	$VBoxContainer/HBoxContainer2/VBoxContainer/SampleTypes.select(1)
 	refresh()
 
 
@@ -45,25 +50,28 @@ func switch_curve(curve_name):
 		
 
 func refresh():
-	var bake_resolution  = $VBoxContainer/BakeResolution.value
+	window_size = get_viewport().get_visible_rect().size
+	var bake_resolution  = $VBoxContainer/HBoxContainer/BakeResolution.value
 	my_curve.bake_resolution = bake_resolution
-	var sample_points = $VBoxContainer/SamplePoints.value
+	var sample_points = $VBoxContainer/HBoxContainer/SamplePoints.value
 	var sample_interval = 1 / (sample_points -1)
-	var distance_between_points = sample_interval * get_viewport().get_visible_rect().size.x
-	var use_baked = $VBoxContainer/ItemList.is_selected(1)
+	var distance_between_points = sample_interval * window_size.x
+	use_baked = $VBoxContainer/HBoxContainer2/VBoxContainer/SampleTypes.is_selected(1)
 	#var use_baked = $VBoxContainer/CheckBox.button_pressed
 	var curve_line : Line2D = $CurveLine
-	var curve_height = 150
+	
 	curve_line.clear_points()
 	if use_baked:
-		$VBoxContainer/CheckBox.text = "sample_baked"
 		for i in sample_points:
-			curve_line.add_point(Vector2(i * distance_between_points, 500 - (curve_height * my_curve.sample_baked(i * sample_interval))))
-			
+			curve_line.add_point(Vector2(i * distance_between_points, window_size.y - (curve_height * my_curve.sample_baked(i * sample_interval))))
+		sample_value = my_curve.sample_baked(sample_offset)
+				
 	else:
-		$VBoxContainer/CheckBox.text = "sample"
 		for i in sample_points:
-			curve_line.add_point(Vector2(i * distance_between_points, 500 - (curve_height * my_curve.sample(i * sample_interval))))
+			curve_line.add_point(Vector2(i * distance_between_points, window_size.y - (curve_height * my_curve.sample(i * sample_interval))))
+		sample_value = my_curve.sample(sample_offset)
+	
+	$VBoxContainer/HBoxContainer2/VBoxContainer/SampleValue.text = "value: %.5f" % sample_value
 
 
 func _on_check_box_toggled(button_pressed):
@@ -83,5 +91,16 @@ func _on_item_list_item_selected(index):
 
 
 func _on_curve_list_item_selected(index):
-	switch_curve($VBoxContainer/CurveList.get_item_text(index))
+	switch_curve($VBoxContainer/HBoxContainer2/CurveList.get_item_text(index))
 	refresh()
+
+
+func _on_sample_offset_value_changed(value):
+	sample_offset = value
+	var marker = $OffsetMarker
+	var offset = value * get_viewport().get_visible_rect().size.x
+	marker.clear_points()
+	marker.add_point(Vector2(offset, window_size.y))
+	marker.add_point(Vector2(offset, window_size.y - curve_height))
+	refresh()
+	
