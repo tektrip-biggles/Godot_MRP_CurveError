@@ -51,7 +51,17 @@ min_value = 2.0
 value = 100.0
 prefix = "sample points:"
 
+[node name="CurveList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+allow_reselect = true
+auto_height = true
+item_count = 3
+item_0/text = "x ^ 2"
+item_1/text = "sawtooth 1"
+item_2/text = "sawtooth 2"
+
 [connection signal="toggled" from="VBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
 [connection signal="value_changed" from="VBoxContainer/BakeResolution" to="." method="_on_bake_resolution_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/SamplePoints" to="." method="_on_sample_points_value_changed"]
+[connection signal="item_selected" from="VBoxContainer/CurveList" to="." method="_on_curve_list_item_selected"]
